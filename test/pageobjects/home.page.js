@@ -28,10 +28,18 @@ class Home extends Page {
         return $(`//input[@id="timesheet_savebutton"]`);
     }
 
-    async openTimesheets (option) {
-        const selectTimeSheet = $(`(//a[@class="rc-link"])[${option}]`);
+    get startDateDiv () {
+        return $(`(//div[@class="list-head-cell-content-label"])[2]`);
+    }
+    
+    get orderByStartDateAsc () {
+        return $(`//span[@class="svg ascendPrimarySmall"]`);
+    }
+
+    async openTimesheets (option) { //option == the row where the open timesheet is located at
         await this.timesheetsBtn.click();
         await this.openTimeSheetsBtn.click();
+        const selectTimeSheet = $(`(//a[@class="rc-link"])[${option}]`);
         await selectTimeSheet.click();
     }
 
@@ -57,18 +65,11 @@ class Home extends Page {
         const projectTask = $(`//select[@shadowid="project_task_${projectOpt}"]`);
         await projectTask.selectByVisibleText(taskTitle);
 
-        /* const dailyTasks = [
-            [4, "Daily Check-in | General project discussion | Documentation analysis"], //monday
-            [8, "Daily Check-in | General project discussion | Documentation analysis | Catalog Specialized"], //tuesday
-            [2, "Daily Check-in | Documentation analysis | Search v2/Multisite Estimation | QA (Douglas/Nilton)"], //wednesday
-            [4, "Daily Check-in | General project discussion | Documentation analysis | Test cases preparation"], //thursday
-            [8, "Daily Check-in | Test cases preparation"]  //friday
-        ]; */
-
         let hour;
         let task;
     
         for (let i = 5; i <= 9; i++) {
+
             let inputHour = $(`//input[@id="ts_c${i}_r${projectOpt}"]`); //from monday to friday - line ${projectOpt}
             await inputHour.click();
             
@@ -101,6 +102,18 @@ class Home extends Page {
             const inputHourDetails = $(`//a[@id="ts_notes_c${i}_r${projectOpt}"]`);
             await inputHourDetails.click();
             await this.notesField.setValue(task);
+            await this.notesOkBtn.click();
+        }
+    }
+
+    async clearTimesheet (projectOpt) {
+        for (let i = 5; i <= 9; i++) {
+            let inputHour = $(`//input[@id="ts_c${i}_r${projectOpt}"]`); //from monday to friday - line ${projectOpt}
+            await inputHour.click();
+            await inputHour.clearValue();
+            const inputHourDetails = $(`//a[@id="ts_notes_c${i}_r${projectOpt}"]`);
+            await inputHourDetails.click();
+            await this.notesField.clearValue();
             await this.notesOkBtn.click();
         }
     }

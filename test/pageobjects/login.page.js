@@ -1,5 +1,3 @@
-
-
 import Page from './page';
 import { user } from '../data/user';
 
@@ -13,11 +11,11 @@ class Login extends Page {
      */
 
      get inputCompanyId () {
-        return $(`(//input[@placeholder="Company ID"])[1]`);
+        return $(`//input[@name="companyID"]`);
     }
 
     get inputUserId () {
-        return $(`(//input[@placeholder="User ID"])[1]`);
+        return $(`//input[@name="userID"]`);
     }
 
     get inputPassword () {
@@ -25,7 +23,7 @@ class Login extends Page {
     }
 
     get btnLogin () {
-        return $(`//input[@id="login_submit_button"]`);
+        return $(`//input[@value="Log in"]`);
     }
 
     /**
